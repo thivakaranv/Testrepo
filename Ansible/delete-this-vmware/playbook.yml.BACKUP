@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files: variables.yml
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: "{{ vcenter_server }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      validate_certs: False
+      name: "{{ vm_name }}"
+      template: "{{ template }}"
+      datacenter: "{{ datacenter_name }}"
+      folder: /{{ datacenter_name }}/vm
+      datastore: "{{ vcenter_datastore }}"
+      networks:
+      - name: Server VLAN 240
+        ip: "{{ vm_ip }}"
+        netmask: "{{ vm_subnetmask }}"
+        gateway: "{{ vm_gateway }}"
+        type: static
+        start_connected: True
+        hostname: "{{ vm_hostname }}"
+        dns_servers:
+        - "{{ vm_dns_1 }}"
+        - "{{ vm_dns_2 }}"
+      state: poweredon
+      customization:
+        autologon: no
+      wait_for_ip_address: yes
+    delegate_to: localhost

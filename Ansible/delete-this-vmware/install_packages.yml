@@ -1,0 +1,12 @@
+---
+
+- name: "Provision Base Configuration"
+  hosts: all
+
+  tasks:
+  - name: Copy packages folder
+    win_copy:
+      src: /home/Ansible-Playbooks/delete-this-vmware/packages/
+      dest: C:\temp\
+
+
